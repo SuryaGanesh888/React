@@ -48,7 +48,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: demoappactions
-          package: ${{github.workspace}}/app-package
+          package: ${{github.workspace}}
           publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
       - name: Output Information
         run: echo "Deploying..."   
