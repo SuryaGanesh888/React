@@ -23,11 +23,19 @@ jobs:
         run: npm ci
       - name: Build the app
         run: npm run build
+      - name: Prepare deployment package
+        run: |
+          mkdir deploy
+          cp -r dist deploy/dist
+          cp server.cjs deploy/server.cjs
+          cp package.json deploy/package.json
+          cp package-lock.json deploy/package-lock.json
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: dist-files
-          path: dist
+          name: app-package
+          path: deploy
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -35,12 +43,12 @@ jobs:
       - name: Download Artifact
         uses: actions/download-artifact@v4
         with:
-          name: dist-files
+          name: app-package
       - name: Deploy on Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: demoappactions
-          package: ${{github.workspace}}
+          package: ${{github.workspace}}/app-package
           publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
       - name: Output Information
         run: echo "Deploying..."   
