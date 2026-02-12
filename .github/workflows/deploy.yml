@@ -44,7 +44,7 @@ jobs:
           package: ./artifact
           publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
       - name: Output Information
-        run: echo "Deploying....."   
+        run: echo "Deploying..."   
                       
 
 
