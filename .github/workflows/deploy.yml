@@ -1,0 +1,52 @@
+name: React App
+on:
+  push:
+   branches:
+    -  master
+    -  dev   
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v3
+      - name: Node setup
+        uses: actions/setup-node@v3
+        with:
+          node-version: 22
+      - name: Cache Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: cache-dep-${{hashFiles('**/package-lock.json')}}
+      - name: Install dependencies
+        run: npm ci
+      - name: Build the app
+        run: npm run build
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist-files
+          path: dist
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: dist-files
+          path: ./artifact
+      - name: Deploy on Azure
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: demoappactions
+          package: ./artifact/dist
+          publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
+      - name: Output Information
+        run: echo "Deploying..."   
+                      
+
+
+
+        
