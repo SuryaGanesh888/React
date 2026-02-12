@@ -41,7 +41,7 @@ jobs:
         uses: azure/webapps-deploy@v3
         with:
           app-name: demoappactions
-          package: ./artifact/dist
+          package: ./artifact
           publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
       - name: Output Information
         run: echo "Deploying....."   
