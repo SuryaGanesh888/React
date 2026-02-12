@@ -36,12 +36,11 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: dist-files
-          path: ./artifact
       - name: Deploy on Azure
         uses: azure/webapps-deploy@v3
         with:
           app-name: demoappactions
-          package: ./artifact
+          package: ${{github.workspace}}
           publish-profile: ${{secrets.AZUREAPPSERVICE_PUBLISHPROFILE}}  
       - name: Output Information
         run: echo "Deploying..."   
